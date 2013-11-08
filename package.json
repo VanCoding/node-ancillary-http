@@ -18,6 +18,7 @@
   "gitHead": "073d48b905d81c360921ae22cfd5f4a163dc0229",
   "dependencies": {
     "ancillary": "~2.0.0",
-    "http.js": "~1.0.0"
+    "http.js": "~1.0.0",
+	"spdy": "~1.0.0"
   }
 }

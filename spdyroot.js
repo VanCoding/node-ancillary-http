@@ -31,7 +31,7 @@ module.exports = function(port,opts,target){
     var s = spdy.createServer(opts,handle);
     
     
-    function handle(req,res,sock){    
+    function handle(req,res,sock){
         var c = net.connect(serverpath,function(){
             
             req.headers.connection = "Close";
@@ -43,13 +43,18 @@ module.exports = function(port,opts,target){
             c.write(header);
 			(sock?sock:req).pipe(c);
             
-            var res2 = new httpjs.httpParser(c,false);      
-            
+            var res2 = new httpjs.httpParser(c,false);  
+			
         	var open = false;
             res2.on("open",function(){
                 open = true;
-                res.writeHead(res2.statusCode,res2.statusMessage,res2.headers);
-                res2.pipe(res); 
+                res.writeHead(res2.statusCode,res2.statusMessage,res2.headers);				
+				res2.on("data",function(d){
+					res.write(d);
+				});
+				res2.on("close",function(){
+					res.end();
+				});
             });
             res2.on("close",function(){
                 if(!open){
